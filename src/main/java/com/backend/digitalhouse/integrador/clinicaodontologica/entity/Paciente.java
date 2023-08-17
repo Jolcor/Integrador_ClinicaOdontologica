@@ -8,7 +8,7 @@ public class Paciente {
     private String apellido;
     private int dni;
     private LocalDate fechaIngreso;
-    private Domicilio domicilio;
+    private static Domicilio domicilio;
 
 
     public Paciente(int id, String nombre, String apellido, int dni, LocalDate fechaIngreso, Domicilio domicilio) {
@@ -68,7 +68,7 @@ public class Paciente {
         this.fechaIngreso = fechaIngreso;
     }
 
-    public Domicilio getDomicilio() {
+    public static Domicilio getDomicilio() {
         return domicilio;
     }
 
