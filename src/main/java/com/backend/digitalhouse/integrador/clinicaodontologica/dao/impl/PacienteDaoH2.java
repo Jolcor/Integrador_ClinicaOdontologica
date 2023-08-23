@@ -23,13 +23,17 @@ public class PacienteDaoH2 implements IDao<Paciente> {
         Connection connection = null;
         Paciente paciente1 = null;
         try{
+            //Levantar el driver y Conectarnos
             connection = H2Connection.getConnection();
             connection.setAutoCommit(false);
 
             DomicilioDaoH2 domicilioDaoH2 = new DomicilioDaoH2();
+            //Como primer paso actualizamos el domicilio del paciente
             Domicilio domicilio = domicilioDaoH2.registrar(paciente.getDomicilio());
-
+            //Crear una sentencia especificando que el ID lo auto incrementa la base de datos y que nos devuelva esa Key es decir ID
             PreparedStatement ps = connection.prepareStatement("INSERT INTO PACIENTES (NOMBRE, APELLIDO, DNI, FECHA, DOMICILIO_ID) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+
+            //No le vamos a pasar el ID ya que hicimos que fuera autoincremental en la base de datos
             ps.setString(1, paciente.getNombre());
             ps.setString(2, paciente.getApellido());
             ps.setInt(3, paciente.getDni());

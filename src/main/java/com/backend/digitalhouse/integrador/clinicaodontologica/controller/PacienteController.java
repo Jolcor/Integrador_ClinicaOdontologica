@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class PacienteController {
 
     private final IPacienteService pacienteService;
+
     @Autowired
     public PacienteController(IPacienteService pacienteService) {
         this.pacienteService = pacienteService;
@@ -30,9 +31,10 @@ public class PacienteController {
     public Paciente modificarPaciente(@RequestBody Paciente pacienteModificado){
         return pacienteService.modificarPaciente(pacienteModificado);
     }
+
     //DELETE
     @DeleteMapping("pacientes/eliminar/{id}")
-    public ResponseEntity<String> eliminarUnPaciente(@RequestBody int id) {
+    public ResponseEntity<String> eliminarUnPaciente(@PathVariable int id) {
         ResponseEntity<String> response = null;
 
         if (pacienteService.buscarPacientePorId(id) != null) {
@@ -44,9 +46,10 @@ public class PacienteController {
         return response;
     }
     //GET
-    @GetMapping("pacientes/{id}")
-    public ResponseEntity<Paciente> listarTodosLosPacientes(@PathVariable("id") int id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Paciente> listarTodosLosPacientes(@PathVariable int id) {
         Paciente paciente = pacienteService.buscarPacientePorId(id);
         return ResponseEntity.ok(paciente);
     }
+
 }
