@@ -2,7 +2,9 @@ package com.backend.digitalhouse.integrador.clinicaodontologica.service.impl;
 
 
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.IDao;
+import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.modificacion.PacienteModificacionEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.paciente.PacienteEntradaDto;
+import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.paciente.PacienteSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Paciente;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.IPacienteService;
 import org.modelmapper.ModelMapper;
@@ -11,56 +13,72 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class PacienteService implements IPacienteService{
+public class PacienteService implements IPacienteService {
     private final IDao<Paciente> pacienteIDao;
     private final ModelMapper modelMapper;
-
-    @Autowired
     public PacienteService(IDao<Paciente> pacienteIDao, ModelMapper modelMapper) {
         this.pacienteIDao = pacienteIDao;
         this.modelMapper = modelMapper;
         configureMapping();
     }
 
-    // Método para registrar un paciente
-    public Paciente registrarPaciente(PacienteEntradaDto paciente){
+    public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) {
         //convertir Dto de entrada a entidad para poder enviarlo a la capa de persistencia
-        // Convertir el DTO a entidad utilizando ModelMapper
-        Paciente pacienteAPersistir = mapToEntity(paciente);
-        // Registrar el paciente en la capa de persistencia
-        Paciente pacienteRegistrado = pacienteIDao.registrar(pacienteAPersistir);
+        Paciente pacienteRecibido = dtoEntradaAEntidad(paciente);
+        Paciente pacienteRegistrado = pacienteIDao.registrar(pacienteRecibido);
 
-        return pacienteRegistrado;
+        return entidadADtoSalida(pacienteRegistrado);
     }
+
     @Override
-    public Paciente buscarPacientePorId(int id){
-        return pacienteIDao.buscarPorId(id);
+    public PacienteSalidaDto modificarPaciente(PacienteModificacionEntradaDto pacienteModificado) {
+        PacienteSalidaDto pacienteSalidaDto = null;
+        Paciente pacienteAModificar = pacienteIDao.buscarPorId(pacienteModificado.getId());
+
+        if(pacienteAModificar != null){
+            pacienteAModificar = dtoModificadoAEntidad(pacienteModificado);
+            pacienteSalidaDto = entidadADtoSalida(pacienteIDao.modificar(pacienteAModificar));
+        }
+        return pacienteSalidaDto;
     }
+
     @Override
-    public List<Paciente> listarPacientes(){
-        return pacienteIDao.listarTodos();
+    public PacienteSalidaDto buscarPacientePorId(int id) {
+        return entidadADtoSalida(pacienteIDao.buscarPorId(id));
     }
+
     @Override
-    public void eliminarPaciente(int id){
+    public List<PacienteSalidaDto> listarPacientes() {
+        List<Paciente> pacientes = pacienteIDao.listarTodos();
+        return pacientes.stream()
+                .map(this::entidadADtoSalida)
+                .toList();
+    }
+
+    @Override
+    public void eliminarPaciente(int id) {
         pacienteIDao.eliminar(id);
+
     }
-
-    @Override
-    public Paciente modificarPaciente(Paciente pacienteModificado) {
-        return pacienteIDao.modificar(pacienteModificado);
-    }
-
-    // Método para configurar reglas de mapeo personalizado en ModelMapper
-
-    private void configureMapping(){
+    private void configureMapping() {
         modelMapper.typeMap(PacienteEntradaDto.class, Paciente.class)
                 .addMappings(mapper -> mapper.map(PacienteEntradaDto::getDomicilio, Paciente::setDomicilio));
-                // Método para convertir el DTO a entidad utilizando ModelMapper
+        modelMapper.typeMap(Paciente.class, PacienteSalidaDto.class)
+                .addMappings(mapper -> mapper.map(Paciente::getDomicilio, PacienteSalidaDto::setDomicilio));
+        modelMapper.typeMap(PacienteModificacionEntradaDto.class, Paciente.class)
+                .addMappings(mapper -> mapper.map(PacienteModificacionEntradaDto::getDomicilio, Paciente::setDomicilio));
+
     }
 
-    // Método para convertir el DTO a entidad utilizando ModelMapper
+    public Paciente dtoEntradaAEntidad(PacienteEntradaDto pacienteEntradaDto) {
+        return modelMapper.map(pacienteEntradaDto, Paciente.class);
+    }
 
-    public Paciente mapToEntity(PacienteEntradaDto pacienteEntradaDto){
+    public PacienteSalidaDto entidadADtoSalida(Paciente paciente) {
+        return modelMapper.map(paciente, PacienteSalidaDto.class);
+    }
+
+    public Paciente dtoModificadoAEntidad(PacienteModificacionEntradaDto pacienteEntradaDto) {
         return modelMapper.map(pacienteEntradaDto, Paciente.class);
     }
 

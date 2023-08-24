@@ -71,7 +71,7 @@ public class Paciente {
         this.fechaIngreso = fechaIngreso;
     }
 
-    public static Domicilio getDomicilio() {
+    public Domicilio getDomicilio() {
         return domicilio;
     }
 

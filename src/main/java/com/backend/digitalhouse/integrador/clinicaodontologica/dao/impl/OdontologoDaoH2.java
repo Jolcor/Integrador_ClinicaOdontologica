@@ -5,11 +5,12 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.dao.IDao;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Odontologo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class OdontologoDaoH2 implements IDao<Odontologo> {
     private static Logger LOGGER = LoggerFactory.getLogger(OdontologoDaoH2.class);
 
