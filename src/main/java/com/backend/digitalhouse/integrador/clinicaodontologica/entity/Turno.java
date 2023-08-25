@@ -25,7 +25,7 @@ public class Turno {
             this.fechaYHora = fechaYHora;
         }
 
-        public int getId() {
+    public int getId() {
             return id;
         }
 

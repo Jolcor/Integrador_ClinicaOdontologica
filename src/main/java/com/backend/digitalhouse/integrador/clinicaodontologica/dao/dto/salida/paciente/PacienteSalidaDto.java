@@ -1,7 +1,5 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.paciente;
 
-import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Domicilio;
-
 import java.time.LocalDate;
 
 public class PacienteSalidaDto {

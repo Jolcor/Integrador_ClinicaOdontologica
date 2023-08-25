@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/pacientes")
 public class PacienteController {
+    //Se inyecta a interfaz de <IPacienteService>
     private final IPacienteService pacienteService;
 
     @Autowired
@@ -51,5 +52,4 @@ public class PacienteController {
         pacienteService.eliminarPaciente(id);
         return new ResponseEntity<>("Paciente eliminado correctamente", HttpStatus.NO_CONTENT);
     }
-
 }

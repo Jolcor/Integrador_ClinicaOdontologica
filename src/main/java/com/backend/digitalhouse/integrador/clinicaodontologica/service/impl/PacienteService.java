@@ -1,6 +1,5 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.service.impl;
 
-
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.IDao;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.modificacion.PacienteModificacionEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.paciente.PacienteEntradaDto;
@@ -16,6 +15,8 @@ import java.util.List;
 public class PacienteService implements IPacienteService {
     private final IDao<Paciente> pacienteIDao;
     private final ModelMapper modelMapper;
+
+    @Autowired
     public PacienteService(IDao<Paciente> pacienteIDao, ModelMapper modelMapper) {
         this.pacienteIDao = pacienteIDao;
         this.modelMapper = modelMapper;
@@ -23,7 +24,7 @@ public class PacienteService implements IPacienteService {
     }
 
     public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) {
-        //convertir Dto de entrada a entidad para poder enviarlo a la capa de persistencia
+        //convertir dto de entrada a entidad para poder enviarlo a la capa de persistencia
         Paciente pacienteRecibido = dtoEntradaAEntidad(paciente);
         Paciente pacienteRegistrado = pacienteIDao.registrar(pacienteRecibido);
 
@@ -57,9 +58,10 @@ public class PacienteService implements IPacienteService {
 
     @Override
     public void eliminarPaciente(int id) {
-        pacienteIDao.eliminar(id);
-
+        if (pacienteIDao.buscarPorId(id) != null) pacienteIDao.eliminar(id);
+        else throw new RuntimeException("El paciente no existe");
     }
+
     private void configureMapping() {
         modelMapper.typeMap(PacienteEntradaDto.class, Paciente.class)
                 .addMappings(mapper -> mapper.map(PacienteEntradaDto::getDomicilio, Paciente::setDomicilio));

@@ -13,6 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+
 @Component
 public class PacienteDaoH2 implements IDao<Paciente> {
 
@@ -41,7 +42,7 @@ public class PacienteDaoH2 implements IDao<Paciente> {
             ps.setInt(5, paciente.getDomicilio().getId());
             ps.execute();
 
-            paciente1 = new Paciente(paciente.getNombre(), paciente.getApellido(), paciente.getDni(), paciente.getFechaIngreso(), domicilio);
+            paciente1 = new Paciente(paciente.getNombre(), paciente.getApellido(),paciente.getDni(), paciente.getFechaIngreso(), domicilio);
 
             ResultSet rs = ps.getGeneratedKeys();
             while (rs.next()){
@@ -91,8 +92,8 @@ public class PacienteDaoH2 implements IDao<Paciente> {
                 paciente = crearObjetoPaciente(rs);
             }
 
-            if(paciente == null) LOGGER.error("No se ha encontrado el paciente con id: " + id);
-            else LOGGER.info("Se ha encontrado el paciente: " + paciente);
+            if(paciente == null) LOGGER.error("No se ha encontrado el paciente con id: {}", id);
+            else LOGGER.info("Se ha encontrado el paciente: {}", paciente);
 
         } catch (Exception e){
             LOGGER.error(e.getMessage());
@@ -101,7 +102,7 @@ public class PacienteDaoH2 implements IDao<Paciente> {
             try {
                 connection.close();
             } catch (Exception ex){
-                LOGGER.error("Ha ocurrido un error al intentar cerrar la bdd. " + ex.getMessage());
+                LOGGER.error("Ha ocurrido un error al intentar cerrar la bdd. {}", ex.getMessage());
                 ex.printStackTrace();
             }
         }
@@ -119,7 +120,7 @@ public class PacienteDaoH2 implements IDao<Paciente> {
             ps.setInt(1, id);
             ps.execute();
             connection.commit();
-            LOGGER.info("Se ha eliminado el paciente con id: " + id);
+            LOGGER.info("Se ha eliminado el paciente con id: {}", id);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -138,7 +139,7 @@ public class PacienteDaoH2 implements IDao<Paciente> {
             try {
                 connection.close();
             } catch (Exception ex) {
-                LOGGER.error("Ha ocurrido un error al intentar cerrar la bdd. " + ex.getMessage());
+                LOGGER.error("Ha ocurrido un error al intentar cerrar la bdd. {}", ex.getMessage());
                 ex.printStackTrace();
             }
         }
@@ -158,7 +159,7 @@ public class PacienteDaoH2 implements IDao<Paciente> {
                 pacientes.add(paciente);
             }
 
-            LOGGER.info("Listado de todos los pacientes: " + pacientes);
+            LOGGER.info("Listado de todos los pacientes: {}", pacientes);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
@@ -168,7 +169,7 @@ public class PacienteDaoH2 implements IDao<Paciente> {
             try {
                 connection.close();
             } catch (Exception ex) {
-                LOGGER.error("Ha ocurrido un error al intentar cerrar la bdd. " + ex.getMessage());
+                LOGGER.error("Ha ocurrido un error al intentar cerrar la bdd. {}", ex.getMessage());
                 ex.printStackTrace();
             }
         }
@@ -191,7 +192,7 @@ public class PacienteDaoH2 implements IDao<Paciente> {
             ps.setInt(6, pacienteModificado.getId());
             ps.execute();
 
-            LOGGER.warn("El paciente con id " + pacienteModificado.getId() + "ha sido modificado: " + pacienteModificado);
+            LOGGER.warn("El paciente con id {} ha sido modificado: ", pacienteModificado.getId(), pacienteModificado);
 
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
@@ -203,7 +204,7 @@ public class PacienteDaoH2 implements IDao<Paciente> {
             try {
                 connection.close();
             } catch (Exception ex){
-                LOGGER.error("Ha ocurrido un error al intentar cerrar la bdd. " + ex.getMessage());
+                LOGGER.error("Ha ocurrido un error al intentar cerrar la bdd. {}", ex.getMessage());
                 ex.printStackTrace();
             }
         }
