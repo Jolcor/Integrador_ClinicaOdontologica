@@ -40,7 +40,7 @@ public class PacienteController {
     public ResponseEntity<PacienteSalidaDto> obtenerPacientePorId(@PathVariable int id){
         return new ResponseEntity<>(pacienteService.buscarPacientePorId(id), HttpStatus.OK);
     }
-
+    //Listar
     @GetMapping()
     public ResponseEntity<List<PacienteSalidaDto>> listarPacientes(){
         return new ResponseEntity<>(pacienteService.listarPacientes(), HttpStatus.OK);

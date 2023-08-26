@@ -1,10 +1,12 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.service.impl;
 
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.IDao;
+import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.modificacion.TurnoModificacionEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.turno.TurnoEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.odontologo.OdontologoSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.paciente.PacienteSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.turno.TurnoSalidaDto;
+import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Paciente;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Turno;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.ITurnoService;
 import org.modelmapper.ModelMapper;
@@ -19,7 +21,6 @@ import java.util.List;
 public class TurnoService implements ITurnoService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TurnoService.class);
-
     private final IDao<Turno> turnoIDao;
     private final ModelMapper modelMapper;
     private final OdontologoService odontologoService;
@@ -31,6 +32,7 @@ public class TurnoService implements ITurnoService {
         this.modelMapper = modelMapper;
         this.odontologoService = odontologoService;
         this.pacienteService = pacienteService;
+        configureMappings();
     }
 
     @Override
@@ -56,7 +58,7 @@ public class TurnoService implements ITurnoService {
             }
         } else {
             Turno turnoNuevo = turnoIDao.registrar(modelMapper.map(turnoEntradaDto, Turno.class));
-            turnoSalidaDto = entidadADto(turnoNuevo);
+            turnoSalidaDto = entidadADtoSalida(turnoNuevo);
             LOGGER.info("Nuevo turno registrado con exito: {}", turnoSalidaDto);
         }
 
@@ -65,17 +67,33 @@ public class TurnoService implements ITurnoService {
 
     @Override
     public List<TurnoSalidaDto> listarTurno() {
-        return null;
+        List<Turno> turnos = turnoIDao.listarTodos();
+        return turnos.stream()
+                .map(this::entidadADtoSalida)
+                .toList();
     }
 
     @Override
     public TurnoSalidaDto buscarTurnoPorId(int id) {
-        return null;
+        return entidadADtoSalida(turnoIDao.buscarPorId(id));
     }
 
     @Override
     public void eliminarTurno(int id) {
+        if (turnoIDao.buscarPorId(id) != null) turnoIDao.eliminar(id);
+        else throw new RuntimeException("El turno no existe");
+    }
 
+    @Override
+    public TurnoSalidaDto modificarTurno(TurnoModificacionEntradaDto turnoModificado) {
+        TurnoSalidaDto turnoSalidaDto = null;
+        Turno turnoAModificar = turnoIDao.buscarPorId(turnoModificado.getId());
+
+        if(turnoAModificar != null){
+            turnoAModificar = dtoModificadoAEntidad(turnoModificado);
+            turnoSalidaDto = entidadADtoSalida(turnoIDao.modificar(turnoAModificar));
+        }
+        return turnoSalidaDto;
     }
 
     private void configureMappings() {
@@ -84,7 +102,15 @@ public class TurnoService implements ITurnoService {
                 .addMappings(mapper -> mapper.map(Turno::getOdontologo, TurnoSalidaDto::setOdontologoTurnoSalidaDto));
     }
 
-    public TurnoSalidaDto entidadADto(Turno turno) {
-        return modelMapper.map(turno, TurnoSalidaDto.class);
+    public TurnoSalidaDto entidadADtoSalida(Turno tueno) {
+        return modelMapper.map(tueno, TurnoSalidaDto.class);
+    }
+
+    public Turno dtoEntradaAEntidad(TurnoEntradaDto turnoEntradaDto) {
+        return modelMapper.map(turnoEntradaDto, Turno.class);
+    }
+
+    public Turno dtoModificadoAEntidad(TurnoModificacionEntradaDto turnoEntradaDto) {
+        return modelMapper.map(turnoEntradaDto, Turno.class);
     }
 }

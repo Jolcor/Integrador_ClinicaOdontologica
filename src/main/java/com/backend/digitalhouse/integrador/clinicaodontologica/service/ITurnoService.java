@@ -1,5 +1,6 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.service;
 
+import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.modificacion.TurnoModificacionEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.turno.TurnoEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.turno.TurnoSalidaDto;
 
@@ -10,5 +11,7 @@ public interface ITurnoService {
     List<TurnoSalidaDto> listarTurno();
     TurnoSalidaDto buscarTurnoPorId(int id);
     void eliminarTurno(int id);
+    TurnoSalidaDto modificarTurno(TurnoModificacionEntradaDto turnoModificado);
+
 
 }

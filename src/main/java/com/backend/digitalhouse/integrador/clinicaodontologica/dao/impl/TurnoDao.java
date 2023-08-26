@@ -56,7 +56,7 @@ public class TurnoDao implements IDao<Turno> {
                 }
 
                 connection.commit();
-                LOGGER.info("Se ha registrado el turno: " + turnoPrimero);
+                LOGGER.info("Se ha registrado el turno: {}", turnoPrimero);
             }
         } catch (Exception e) {
             // Manejar las excepciones, realizar rollback y cerrar la conexión
@@ -77,7 +77,7 @@ public class TurnoDao implements IDao<Turno> {
                     connection.close();
                 }
             } catch (Exception e) {
-                LOGGER.error("Ha ocurrido un error al intentar cerrar la base de datos. " + e.getMessage());
+                LOGGER.error("Ha ocurrido un error al intentar cerrar la base de datos. {}", e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -127,21 +127,18 @@ public class TurnoDao implements IDao<Turno> {
     }
 
     private Turno crearObjetoTurno(ResultSet resultSet) throws SQLException {
-        int idTurno = resultSet.getInt("id");
-        int idOdontologo = resultSet.getInt("id_odontologo");
-        int idPaciente = resultSet.getInt("id_paciente");
-        LocalDateTime fechaYHora = resultSet.getTimestamp("fecha").toLocalDateTime();
 
-        TurnoDao turnoDao = new TurnoDao();
-        Turno turnoPaciente = turnoDao.buscarPorId(resultSet.getInt("turno_id"));
+        int idTurno = resultSet.getInt("id");
 
         Odontologo odontologo = new Odontologo();
-        odontologo.setId(idOdontologo);
+        odontologo.setId(resultSet.getInt("id_odontologo"));
 
         Paciente paciente = new Paciente();
-        paciente.setId(idPaciente);
+        paciente.setId(resultSet.getInt("id_paciente"));
 
-        return new Turno(idTurno, odontologo, paciente, fechaYHora, turnoPaciente);
+        LocalDateTime fechaYHora = resultSet.getTimestamp("fecha").toLocalDateTime();
+
+        return new Turno(idTurno, odontologo, paciente, fechaYHora);
     }
 
 
