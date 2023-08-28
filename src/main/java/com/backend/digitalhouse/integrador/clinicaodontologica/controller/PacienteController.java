@@ -1,5 +1,6 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.controller;
 
+
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.modificacion.PacienteModificacionEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.paciente.PacienteEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.paciente.PacienteSalidaDto;
@@ -15,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/pacientes")
 public class PacienteController {
-    //Se inyecta a interfaz de <IPacienteService>
     private final IPacienteService pacienteService;
 
     @Autowired
@@ -40,7 +40,7 @@ public class PacienteController {
     public ResponseEntity<PacienteSalidaDto> obtenerPacientePorId(@PathVariable int id){
         return new ResponseEntity<>(pacienteService.buscarPacientePorId(id), HttpStatus.OK);
     }
-    //Listar
+
     @GetMapping()
     public ResponseEntity<List<PacienteSalidaDto>> listarPacientes(){
         return new ResponseEntity<>(pacienteService.listarPacientes(), HttpStatus.OK);
@@ -52,4 +52,5 @@ public class PacienteController {
         pacienteService.eliminarPaciente(id);
         return new ResponseEntity<>("Paciente eliminado correctamente", HttpStatus.NO_CONTENT);
     }
+
 }

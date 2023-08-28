@@ -15,7 +15,6 @@ import java.util.List;
 public class PacienteService implements IPacienteService {
     private final IDao<Paciente> pacienteIDao;
     private final ModelMapper modelMapper;
-
     @Autowired
     public PacienteService(IDao<Paciente> pacienteIDao, ModelMapper modelMapper) {
         this.pacienteIDao = pacienteIDao;
@@ -23,8 +22,22 @@ public class PacienteService implements IPacienteService {
         configureMapping();
     }
 
+    private void configureMapping() {
+        // Mapeo de PacienteEntradaDto a Paciente
+        modelMapper.createTypeMap(PacienteEntradaDto.class, Paciente.class)
+                .addMapping(PacienteEntradaDto::getDomicilio, Paciente::setDomicilio);
+
+        // Mapeo de PacienteModificacionEntradaDto a Paciente
+        modelMapper.createTypeMap(PacienteModificacionEntradaDto.class, Paciente.class)
+                .addMapping(PacienteModificacionEntradaDto::getDomicilio, Paciente::setDomicilio);
+
+        // Mapeo de Paciente a PacienteSalidaDto
+        modelMapper.createTypeMap(Paciente.class, PacienteSalidaDto.class)
+                .addMapping(Paciente::getDomicilio, PacienteSalidaDto::setDomicilio);
+    }
+
+
     public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) {
-        //convertir dto de entrada a entidad para poder enviarlo a la capa de persistencia
         Paciente pacienteRecibido = dtoEntradaAEntidad(paciente);
         Paciente pacienteRegistrado = pacienteIDao.registrar(pacienteRecibido);
 
@@ -39,7 +52,9 @@ public class PacienteService implements IPacienteService {
         if(pacienteAModificar != null){
             pacienteAModificar = dtoModificadoAEntidad(pacienteModificado);
             pacienteSalidaDto = entidadADtoSalida(pacienteIDao.modificar(pacienteAModificar));
+
         }
+
         return pacienteSalidaDto;
     }
 
@@ -51,6 +66,7 @@ public class PacienteService implements IPacienteService {
     @Override
     public List<PacienteSalidaDto> listarPacientes() {
         List<Paciente> pacientes = pacienteIDao.listarTodos();
+
         return pacientes.stream()
                 .map(this::entidadADtoSalida)
                 .toList();
@@ -58,18 +74,7 @@ public class PacienteService implements IPacienteService {
 
     @Override
     public void eliminarPaciente(int id) {
-        if (pacienteIDao.buscarPorId(id) != null) pacienteIDao.eliminar(id);
-        else throw new RuntimeException("El paciente no existe");
-    }
-
-    private void configureMapping() {
-        modelMapper.typeMap(PacienteEntradaDto.class, Paciente.class)
-                .addMappings(mapper -> mapper.map(PacienteEntradaDto::getDomicilio, Paciente::setDomicilio));
-        modelMapper.typeMap(Paciente.class, PacienteSalidaDto.class)
-                .addMappings(mapper -> mapper.map(Paciente::getDomicilio, PacienteSalidaDto::setDomicilio));
-        modelMapper.typeMap(PacienteModificacionEntradaDto.class, Paciente.class)
-                .addMappings(mapper -> mapper.map(PacienteModificacionEntradaDto::getDomicilio, Paciente::setDomicilio));
-
+        pacienteIDao.eliminar(id);
     }
 
     public Paciente dtoEntradaAEntidad(PacienteEntradaDto pacienteEntradaDto) {
@@ -83,6 +88,4 @@ public class PacienteService implements IPacienteService {
     public Paciente dtoModificadoAEntidad(PacienteModificacionEntradaDto pacienteEntradaDto) {
         return modelMapper.map(pacienteEntradaDto, Paciente.class);
     }
-
-
 }

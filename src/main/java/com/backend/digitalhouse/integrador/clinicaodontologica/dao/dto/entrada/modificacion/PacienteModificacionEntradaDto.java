@@ -7,28 +7,20 @@ import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PacienteModificacionEntradaDto {
-
     @NotNull
     private int id;
-
     @NotNull
     private String nombre;
-
     @NotNull
     private String apellido;
-
     @NotNull
     private String dni;
-
     @NotNull
     private LocalDate fechaIngreso;
-
     @NotNull
     private DomicilioModificacionEntradaDto domicilio;
-
     public PacienteModificacionEntradaDto() {
     }
-
     public PacienteModificacionEntradaDto(int id, String nombre, String apellido, String dni, LocalDate fechaIngreso, DomicilioModificacionEntradaDto domicilio) {
         this.id = id;
         this.nombre = nombre;
