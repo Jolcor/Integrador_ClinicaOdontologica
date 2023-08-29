@@ -9,7 +9,7 @@ import java.util.List;
 public interface IPacienteService {
     List<PacienteSalidaDto> listarPacientes();
     PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente);
-    PacienteSalidaDto buscarPacientePorId(int id);
-    void eliminarPaciente(int id);
+    PacienteSalidaDto buscarPacientePorId(Long id);
+    void eliminarPaciente(Long id);
     PacienteSalidaDto modificarPaciente(PacienteModificacionEntradaDto pacienteModificado);
 }

@@ -1,59 +1,59 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.entity;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "TURNOS")
 public class Turno {
 
-        private int id;
-        private Odontologo odontologo;
-        private Paciente paciente;
-        private LocalDateTime fechaYHora;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        public Turno() {
-        }
+    @Column(name = "ODONTOLOGO_ID", nullable = false, length = 50)
+    private Odontologo odontologo;
 
-        public Turno(int id, Odontologo odontologo, Paciente paciente, LocalDateTime fechaYHora) {
-            this.id = id;
-            this.odontologo = odontologo;
-            this.paciente = paciente;
-            this.fechaYHora = fechaYHora;
-        }
+    @Column(name = "PACIENTE_ID", nullable = false, length = 50)
+    private Paciente paciente;
 
-        public Turno(Odontologo odontologo, Paciente paciente, LocalDateTime fechaYHora) {
-            this.odontologo = odontologo;
-            this.paciente = paciente;
-            this.fechaYHora = fechaYHora;
-        }
+    @Column(name = "FECHA_Y_HORA", nullable = false)
+    private LocalDateTime fechaYHora;
 
-    public int getId() {
+    public Turno() {
+    }
+
+    public Turno(Odontologo odontologo, Paciente paciente, LocalDateTime fechaYHora) {
+        this.odontologo = odontologo;
+        this.paciente = paciente;
+        this.fechaYHora = fechaYHora;
+    }
+
+    public Long getId() {
             return id;
         }
 
-        public void setId(int id) {
-            this.id = id;
-        }
+    public Odontologo getOdontologo() {
+        return odontologo;
+    }
 
-        public Odontologo getOdontologo() {
-            return odontologo;
-        }
+    public void setOdontologo(Odontologo odontologo) {
+        this.odontologo = odontologo;
+    }
 
-        public void setOdontologo(Odontologo odontologo) {
-            this.odontologo = odontologo;
-        }
+    public Paciente getPaciente() {
+        return paciente;
+    }
 
-        public Paciente getPaciente() {
-            return paciente;
-        }
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
 
-        public void setPaciente(Paciente paciente) {
-            this.paciente = paciente;
-        }
+    public LocalDateTime getFechaYHora() {
+        return fechaYHora;
+    }
 
-        public LocalDateTime getFechaYHora() {
-            return fechaYHora;
-        }
-
-        public void setFechaYHora(LocalDateTime fechaYHora) {
-            this.fechaYHora = fechaYHora;
-        }
+    public void setFechaYHora(LocalDateTime fechaYHora) {
+        this.fechaYHora = fechaYHora;
+    }
 }

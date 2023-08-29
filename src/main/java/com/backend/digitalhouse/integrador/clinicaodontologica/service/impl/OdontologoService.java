@@ -5,8 +5,11 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.m
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.odontologo.OdontologoEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.odontologo.OdontologoSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Odontologo;
+import com.backend.digitalhouse.integrador.clinicaodontologica.repository.OdontologoRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.IOdontologoService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,58 +17,47 @@ import java.util.List;
 
 @Service
 public class OdontologoService implements IOdontologoService {
-    private final IDao<Odontologo> odontologoIDao;
+    private final Logger LOGGER = LoggerFactory.getLogger(PacienteService.class);
+    private final OdontologoRepository odontologoRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public OdontologoService(IDao<Odontologo> odontologoIDao, ModelMapper modelMapper) {
-        this.odontologoIDao = odontologoIDao;
+    public OdontologoService(OdontologoRepository odontologoRepository, ModelMapper modelMapper) {
+        this.odontologoRepository = odontologoRepository;
         this.modelMapper = modelMapper;
-        configureMapping();
 
     }
     @Override
     public OdontologoSalidaDto registrarOdontologo(OdontologoEntradaDto odontologo) {
-        Odontologo odontologoRecibido = dtoEntradaAEntidad(odontologo);
-        Odontologo odontologoRegistrado = odontologoIDao.registrar(odontologoRecibido);
-
-        return entidadADtoSalida(odontologoRegistrado);
+        Odontologo odontologoNuevo = odontologoRepository.save(dtoEntradaAEntidad(odontologo));
+        LOGGER.info("Odontologo ha sido registrado: {}", odontologoNuevo);
+        return entidadADtoSalida(odontologoNuevo);
     }
 
-    public OdontologoSalidaDto buscarOdontologoPorId(int id) {
-        return entidadADtoSalida(odontologoIDao.buscarPorId(id));
+    public OdontologoSalidaDto buscarOdontologoPorId(Long id) {
+        LOGGER.info("Odontolgo por id: {}", id);
+
+        return entidadADtoSalida(odontologoRepository.getById(id));
     }
 
     public List<OdontologoSalidaDto> listarOdontologos() {
-        return odontologoIDao.listarTodos().stream()
+        List<Odontologo> odontologos = odontologoRepository.findAll();
+        LOGGER.info("Lista de odontologos...");
+
+        return odontologos.stream()
                 .map(this::entidadADtoSalida)
                 .toList();
     }
 
-    public void eliminarOdontologo(int id) {
-        if(odontologoIDao.buscarPorId(id) != null) odontologoIDao.eliminar(id);
-        else new RuntimeException("El odontologo no existe");
+    public void eliminarOdontologo(Long id) {
+        if(odontologoRepository != null) odontologoRepository.deleteById(id);
+        new RuntimeException("El odontologo no existe..");
     }
 
     @Override
     public OdontologoSalidaDto actualizarOdontologo(OdontologoModificacionEntradaDto odontologoModificado) {
-        OdontologoSalidaDto odontologoSalidaDto = null;
-        Odontologo odontologoAModificar = odontologoIDao.buscarPorId(odontologoModificado.getId());
-
-        if(odontologoAModificar != null){
-            odontologoAModificar = dtoModificadoAEntidad(odontologoModificado);
-            odontologoSalidaDto = entidadADtoSalida(odontologoIDao.modificar(odontologoAModificar));
-        }
-        return odontologoSalidaDto;
-    }
-
-    private void configureMapping() {
-        modelMapper.typeMap(OdontologoEntradaDto.class, Odontologo.class)
-                .addMappings(mapper -> mapper.map(OdontologoEntradaDto::getMatricula, Odontologo::setMatricula));
-        modelMapper.typeMap(Odontologo.class, OdontologoSalidaDto.class)
-                .addMappings(mapper -> mapper.map(Odontologo::getMatricula, OdontologoSalidaDto::setMatricula));
-        modelMapper.typeMap(OdontologoModificacionEntradaDto.class, Odontologo.class)
-                .addMappings(mapper -> mapper.map(OdontologoModificacionEntradaDto::getMatricula, Odontologo::setMatricula));
+        Odontologo odontologoActualizado = odontologoRepository.save(dtoModificadoAEntidad(odontologoModificado));
+        return entidadADtoSalida(odontologoActualizado);
     }
 
     public Odontologo dtoEntradaAEntidad(OdontologoEntradaDto odontologoEntradaDto) {

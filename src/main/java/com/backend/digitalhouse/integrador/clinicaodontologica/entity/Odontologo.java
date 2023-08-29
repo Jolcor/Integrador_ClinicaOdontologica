@@ -1,19 +1,21 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.entity;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "ODONTOLOGOS")
 public class Odontologo {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String matricula;
+    @Column(name = "NOMBRE_ODONTOLOGO", nullable = false, length = 50)
     private String nombre;
+
+    @Column(name = "NOMBRE_ODONTOLOGO", nullable = false, length = 50)
     private String apellido;
-
     public Odontologo() {
-    }
-
-    public Odontologo(int id, String matricula, String nombre, String apellido) {
-        this.id = id;
-        this.matricula = matricula;
-        this.nombre = nombre;
-        this.apellido = apellido;
     }
 
     public Odontologo(String matricula, String nombre, String apellido) {
@@ -22,12 +24,8 @@ public class Odontologo {
         this.apellido = apellido;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getMatricula() {

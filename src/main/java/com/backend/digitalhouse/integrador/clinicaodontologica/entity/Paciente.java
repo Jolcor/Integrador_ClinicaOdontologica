@@ -1,21 +1,36 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.entity;
 
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "PACIENTES")
 public class Paciente {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "NOMBRE_PACIENTE", nullable = false, length = 50)
     private String nombre;
+
+    @Column(name = "APELLIDO_PACIENTE", nullable = false, length = 50)
     private String apellido;
+
     private int dni;
     //@JsonProperty("fechaingreso") en caso de que el campo a mapear este escrito distinto a nuestro modelo
-    private LocalDate fechaIngreso;
+
+    @Column(name = "FECHA_Y_HORA", nullable = false)
+    private LocalDateTime fechaIngreso;
+
+    //@OneToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "DOMICILIO_ID", referencedColumnName = "id")
+    @Column(name = "DOMICILIO_ID", nullable = false, length = 50)
     private static Domicilio domicilio;
 
     public Paciente() {
     }
 
-    public Paciente(int id, String nombre, String apellido, int dni, LocalDate fechaIngreso, Domicilio domicilio) {
-        this.id = id;
+    public Paciente(String nombre, String apellido, int dni, LocalDateTime fechaIngreso, Domicilio domicilio) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -23,20 +38,8 @@ public class Paciente {
         this.domicilio = domicilio;
     }
 
-    public Paciente(String nombre, String apellido, int dni, LocalDate fechaIngreso, Domicilio domicilio) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.dni = dni;
-        this.fechaIngreso = fechaIngreso;
-        this.domicilio = domicilio;
-    }
-
-    public int getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNombre() {
@@ -63,11 +66,11 @@ public class Paciente {
         this.dni = dni;
     }
 
-    public LocalDate getFechaIngreso() {
+    public LocalDateTime getFechaIngreso() {
         return fechaIngreso;
     }
 
-    public void setFechaIngreso(LocalDate fechaIngreso) {
+    public void setFechaIngreso(LocalDateTime fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
 

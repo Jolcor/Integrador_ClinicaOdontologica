@@ -24,5 +24,4 @@ public class ClinicaOdontologicaApplication {
 		return new ModelMapper();
 	}
 
-
 }

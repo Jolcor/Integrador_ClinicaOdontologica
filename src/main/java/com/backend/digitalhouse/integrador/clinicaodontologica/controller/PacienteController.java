@@ -37,7 +37,7 @@ public class PacienteController {
 
     //GET
     @GetMapping("{id}")
-    public ResponseEntity<PacienteSalidaDto> obtenerPacientePorId(@PathVariable int id){
+    public ResponseEntity<PacienteSalidaDto> obtenerPacientePorId(@PathVariable Long id){
         return new ResponseEntity<>(pacienteService.buscarPacientePorId(id), HttpStatus.OK);
     }
 
@@ -48,7 +48,7 @@ public class PacienteController {
 
     //DELETE
     @DeleteMapping("eliminar/{id}")
-    public ResponseEntity<?> eliminarPaciente(@PathVariable int id){
+    public ResponseEntity<?> eliminarPaciente(@PathVariable Long id){
         pacienteService.eliminarPaciente(id);
         return new ResponseEntity<>("Paciente eliminado correctamente", HttpStatus.NO_CONTENT);
     }

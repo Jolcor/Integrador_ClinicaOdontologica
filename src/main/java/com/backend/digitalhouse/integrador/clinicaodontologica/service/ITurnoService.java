@@ -9,9 +9,7 @@ import java.util.List;
 public interface ITurnoService {
     TurnoSalidaDto registrarTurno(TurnoEntradaDto turnoEntradaDto);
     List<TurnoSalidaDto> listarTurno();
-    TurnoSalidaDto buscarTurnoPorId(int id);
-    void eliminarTurno(int id);
+    TurnoSalidaDto buscarTurnoPorId(Long id);
+    void eliminarTurno(Long id);
     TurnoSalidaDto modificarTurno(TurnoModificacionEntradaDto turnoModificado);
-
-
 }

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TurnoModificacionEntradaDto {
     @NotNull
-    private int id;
+    private Long id;
 
     @NotNull
     private OdontologoModificacionEntradaDto odontologo;
@@ -22,18 +22,18 @@ public class TurnoModificacionEntradaDto {
     public TurnoModificacionEntradaDto() {
     }
 
-    public TurnoModificacionEntradaDto(int id, OdontologoModificacionEntradaDto odontologo, PacienteModificacionEntradaDto paciente, LocalDateTime fechaYHora) {
+    public TurnoModificacionEntradaDto(Long id, OdontologoModificacionEntradaDto odontologo, PacienteModificacionEntradaDto paciente, LocalDateTime fechaYHora) {
         this.id = id;
         this.odontologo = odontologo;
         this.paciente = paciente;
         this.fechaYHora = fechaYHora;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
