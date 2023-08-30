@@ -20,7 +20,8 @@ public class Paciente {
     private String apellido;
 
     @Column(name = "DNI", nullable = false, length = 50)
-    private int dni;
+    private Integer dni;
+
     //@JsonProperty("fechaIngreso") en caso de que el campo a mapear este escrito distinto a nuestro modelo
 
     @Column(name = "FECHA_Y_HORA", nullable = false)
@@ -37,7 +38,7 @@ public class Paciente {
     public Paciente() {
     }
 
-    public Paciente(String nombre, String apellido, int dni, LocalDateTime fechaIngreso, Domicilio domicilio) {
+    public Paciente(String nombre, String apellido, Integer dni, LocalDateTime fechaIngreso, Domicilio domicilio) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -65,11 +66,11 @@ public class Paciente {
         this.apellido = apellido;
     }
 
-    public int getDni() {
+    public Integer getDni() {
         return dni;
     }
 
-    public void setDni(int dni) {
+    public void setDni(Integer dni) {
         this.dni = dni;
     }
 

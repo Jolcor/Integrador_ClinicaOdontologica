@@ -1,4 +1,4 @@
-package com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.modificacion;
+package com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modificacion;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

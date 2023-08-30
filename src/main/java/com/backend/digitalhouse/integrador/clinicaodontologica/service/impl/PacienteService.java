@@ -1,8 +1,8 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.service.impl;
 
-import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.modificacion.PacienteModificacionEntradaDto;
-import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.entrada.paciente.PacienteEntradaDto;
-import com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.paciente.PacienteSalidaDto;
+import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modificacion.PacienteModificacionEntradaDto;
+import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.paciente.PacienteEntradaDto;
+import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.paciente.PacienteSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Paciente;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.PacienteRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.IPacienteService;

@@ -1,4 +1,4 @@
-package com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.odontologo;
+package com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.odontologo;
 
 public class OdontologoSalidaDto {
 

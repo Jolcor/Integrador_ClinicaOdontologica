@@ -1,4 +1,4 @@
-package com.backend.digitalhouse.integrador.clinicaodontologica.dao.dto.salida.paciente;
+package com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.paciente;
 
 import java.time.LocalDate;
 
