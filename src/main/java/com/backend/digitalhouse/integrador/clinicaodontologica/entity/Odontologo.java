@@ -1,7 +1,10 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "ODONTOLOGOS")
@@ -13,8 +16,13 @@ public class Odontologo {
     @Column(name = "NOMBRE_ODONTOLOGO", nullable = false, length = 50)
     private String nombre;
 
-    @Column(name = "NOMBRE_ODONTOLOGO", nullable = false, length = 50)
+    @Column(name = "APELLIDO_ODONTOLOGO", nullable = false, length = 50)
     private String apellido;
+
+    @OneToMany(mappedBy = "odontologo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Set<Turno> turnos = new HashSet<>();
+
     public Odontologo() {
     }
 

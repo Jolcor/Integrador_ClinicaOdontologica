@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Null;
 import java.util.List;
 
 @Service
@@ -54,7 +53,6 @@ public class TurnoService implements ITurnoService {
         return entidadADtoSalida(turnoNuevo);
     }
 
-
     @Override
     public List<TurnoSalidaDto> listarTurno() {
         List<Turno> turnos = turnoRepository.findAll();
@@ -76,16 +74,17 @@ public class TurnoService implements ITurnoService {
 
     @Override
     public TurnoSalidaDto modificarTurno(TurnoModificacionEntradaDto turnoModificado) {
+
         LOGGER.info("inicio del metodo put: actualizar turno");
 
         return null;
     }
 
-    private void configureMappings() {
+    /*private void configureMappings() {
         modelMapper.typeMap(Turno.class, TurnoSalidaDto.class)
                 .addMappings(mapper -> mapper.map(Turno::getPaciente, TurnoSalidaDto::setPacienteTurnoSalidaDto))
                 .addMappings(mapper -> mapper.map(Turno::getOdontologo, TurnoSalidaDto::setOdontologoTurnoSalidaDto));
-    }
+    }*/
 
     public TurnoSalidaDto entidadADtoSalida(Turno turno) {
         return modelMapper.map(turno, TurnoSalidaDto.class);

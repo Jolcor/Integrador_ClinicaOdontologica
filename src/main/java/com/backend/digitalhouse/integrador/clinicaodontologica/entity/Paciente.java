@@ -1,8 +1,11 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "PACIENTES")
@@ -16,16 +19,20 @@ public class Paciente {
     @Column(name = "APELLIDO_PACIENTE", nullable = false, length = 50)
     private String apellido;
 
+    @Column(name = "DNI", nullable = false, length = 50)
     private int dni;
-    //@JsonProperty("fechaingreso") en caso de que el campo a mapear este escrito distinto a nuestro modelo
+    //@JsonProperty("fechaIngreso") en caso de que el campo a mapear este escrito distinto a nuestro modelo
 
     @Column(name = "FECHA_Y_HORA", nullable = false)
     private LocalDateTime fechaIngreso;
 
-    //@OneToOne(cascade = CascadeType.ALL)
-    //@JoinColumn(name = "DOMICILIO_ID", referencedColumnName = "id")
-    @Column(name = "DOMICILIO_ID", nullable = false, length = 50)
-    private static Domicilio domicilio;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "DOMICILIO_ID", referencedColumnName = "id") // DOMICILIO_ID -> nombre de la clave foranea
+    private Domicilio domicilio;
+
+    @OneToMany(mappedBy = "paciente")// nombre de la columna que tiene relación
+    @JsonIgnore
+    private Set<Turno> turnos = new HashSet<>();
 
     public Paciente() {
     }

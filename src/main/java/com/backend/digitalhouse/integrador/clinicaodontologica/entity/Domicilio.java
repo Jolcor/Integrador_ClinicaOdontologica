@@ -1,5 +1,7 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,6 +20,10 @@ public class Domicilio {
 
     @Column(name = "PROVINCIA", nullable = false, length = 50)
     private String provincia;
+
+    @OneToOne(mappedBy = "domicilio")
+    @JsonIgnore
+    private Paciente paciente;
 
 
     public Domicilio() {

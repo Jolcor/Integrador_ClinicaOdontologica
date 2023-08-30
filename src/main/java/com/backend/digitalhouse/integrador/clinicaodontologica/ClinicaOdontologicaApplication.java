@@ -1,6 +1,5 @@
 package com.backend.digitalhouse.integrador.clinicaodontologica;
 
-import com.backend.digitalhouse.integrador.clinicaodontologica.dao.H2Connection;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +15,7 @@ public class ClinicaOdontologicaApplication {
 
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 		SpringApplication.run(ClinicaOdontologicaApplication.class, args);
-		H2Connection.create();
-		LOGGER.info("ClinicaOdontologica is now running...");
+		LOGGER.info("Clinica Odontologica is now running...");
 	}
 	@Bean
 	public ModelMapper modelMapper(){

@@ -11,10 +11,12 @@ public class Turno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ODONTOLOGO_ID", nullable = false, length = 50)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ODONTOLOGO_ID", nullable = false)
     private Odontologo odontologo;
 
-    @Column(name = "PACIENTE_ID", nullable = false, length = 50)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PACIENTE_ID", nullable = false)
     private Paciente paciente;
 
     @Column(name = "FECHA_Y_HORA", nullable = false)
