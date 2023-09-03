@@ -24,39 +24,58 @@ public class OdontologoService implements IOdontologoService {
     public OdontologoService(OdontologoRepository odontologoRepository, ModelMapper modelMapper) {
         this.odontologoRepository = odontologoRepository;
         this.modelMapper = modelMapper;
-
     }
+
     @Override
     public OdontologoSalidaDto registrarOdontologo(OdontologoEntradaDto odontologo) {
-        Odontologo odontologoNuevo = odontologoRepository.save(dtoEntradaAEntidad(odontologo));
-        LOGGER.info("Odontologo ha sido registrado: {}", odontologoNuevo);
-        return entidadADtoSalida(odontologoNuevo);
-    }
 
-    public OdontologoSalidaDto buscarOdontologoPorId(Long id) {
-        LOGGER.info("Odontolgo por id: {}", id);
-
-        return entidadADtoSalida(odontologoRepository.getById(id));
-    }
-
-    public List<OdontologoSalidaDto> listarOdontologos() {
-        List<Odontologo> odontologos = odontologoRepository.findAll();
-        LOGGER.info("Lista de odontologos...");
-
-        return odontologos.stream()
-                .map(this::entidadADtoSalida)
-                .toList();
-    }
-
-    public void eliminarOdontologo(Long id) {
-        if(odontologoRepository != null) odontologoRepository.deleteById(id);
-        new RuntimeException("El odontologo no existe..");
+        Odontologo odGuardado = odontologoRepository.save(dtoEntradaAEntidad(odontologo));
+        OdontologoSalidaDto odontologoSalidaDto = entidadADtoSalida(odGuardado);
+        LOGGER.info("Odontologo guardado: {}", odontologoSalidaDto);
+        return odontologoSalidaDto;
     }
 
     @Override
     public OdontologoSalidaDto actualizarOdontologo(OdontologoModificacionEntradaDto odontologoModificado) {
-        Odontologo odontologoActualizado = odontologoRepository.save(dtoModificadoAEntidad(odontologoModificado));
-        return entidadADtoSalida(odontologoActualizado);
+        Odontologo odontologoRecibido = dtoModificadoAEntidad(odontologoModificado);
+        Odontologo odontologoAModificar = odontologoRepository.findById(odontologoRecibido.getId()).orElse(null);
+        OdontologoSalidaDto odontologoSalidaDto = null;
+
+        if (odontologoAModificar != null) {
+
+            odontologoAModificar = odontologoRecibido;
+            odontologoRepository.save(odontologoAModificar);
+            odontologoSalidaDto = entidadADtoSalida(odontologoAModificar);
+            LOGGER.warn("Odontologo actualizado: {}", odontologoSalidaDto);
+
+        } else LOGGER.error("No fue posible actualizar los datos, odontologo no se encuentra registrado");
+        return odontologoSalidaDto;
+    }
+
+    public OdontologoSalidaDto buscarOdontologoPorId(Long id) {
+        Odontologo odontologoBuscado = odontologoRepository.findById(id).orElse(null); //orElse -> para anular el null
+        OdontologoSalidaDto odontologoSalida = null;
+        if (odontologoBuscado != null) {
+            odontologoSalida = entidadADtoSalida(odontologoBuscado);
+            LOGGER.info("Odontolgo por id: {}", odontologoSalida);
+        } else LOGGER.error("El id_odontologo no se encuentra registrado en la baase de datos");
+        return odontologoSalida;
+    }
+
+    public List<OdontologoSalidaDto> listarOdontologos() {
+
+        List<OdontologoSalidaDto> odontologos = odontologoRepository.findAll().stream()
+                .map(this::entidadADtoSalida)
+                .toList(); // -> .toList para listar
+        LOGGER.info("Listado de todos los odontologos: {}", odontologos);
+        return odontologos;
+    }
+
+    public void eliminarOdontologo(Long id) {
+        if (buscarOdontologoPorId(id) != null) {
+            odontologoRepository.deleteById(id);
+            LOGGER.warn("Se ha eliminado el odontologo con id: {}", id);
+        } else LOGGER.error("No se ha encontrado el odontologo con id {}", id);
     }
 
     public Odontologo dtoEntradaAEntidad(OdontologoEntradaDto odontologoEntradaDto) {
@@ -67,8 +86,8 @@ public class OdontologoService implements IOdontologoService {
         return modelMapper.map(odontologo, OdontologoSalidaDto.class);
     }
 
-    public Odontologo dtoModificadoAEntidad(OdontologoModificacionEntradaDto odontologoEntradaDto) {
-        return modelMapper.map(odontologoEntradaDto, Odontologo.class);
+    public Odontologo dtoModificadoAEntidad(OdontologoModificacionEntradaDto odontologoModificacionEntradaDto) {
+        return modelMapper.map(odontologoModificacionEntradaDto, Odontologo.class);
     }
 }
 

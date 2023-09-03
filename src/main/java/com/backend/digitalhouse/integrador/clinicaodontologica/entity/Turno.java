@@ -12,11 +12,11 @@ public class Turno {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ODONTOLOGO_ID", nullable = false)
+    @JoinColumn(name = "odontologo_id", nullable = false) // odontologo -> entidad : id -> referencia
     private Odontologo odontologo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PACIENTE_ID", nullable = false)
+    @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
     @Column(name = "FECHA_Y_HORA", nullable = false)

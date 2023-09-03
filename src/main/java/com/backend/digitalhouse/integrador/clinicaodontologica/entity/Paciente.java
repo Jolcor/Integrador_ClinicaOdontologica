@@ -20,15 +20,15 @@ public class Paciente {
     private String apellido;
 
     @Column(name = "DNI", nullable = false, length = 50)
-    private Integer dni;
+    private int dni;
 
     //@JsonProperty("fechaIngreso") en caso de que el campo a mapear este escrito distinto a nuestro modelo
 
     @Column(name = "FECHA_Y_HORA", nullable = false)
     private LocalDateTime fechaIngreso;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "DOMICILIO_ID", referencedColumnName = "id") // DOMICILIO_ID -> nombre de la clave foranea
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "domicilio_id", referencedColumnName = "id") // DOMICILIO_ID -> nombre de la clave foránea
     private Domicilio domicilio;
 
     @OneToMany(mappedBy = "paciente")// nombre de la columna que tiene relación
@@ -38,7 +38,7 @@ public class Paciente {
     public Paciente() {
     }
 
-    public Paciente(String nombre, String apellido, Integer dni, LocalDateTime fechaIngreso, Domicilio domicilio) {
+    public Paciente(String nombre, String apellido, int dni, LocalDateTime fechaIngreso, Domicilio domicilio) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.dni = dni;
@@ -66,11 +66,11 @@ public class Paciente {
         this.apellido = apellido;
     }
 
-    public Integer getDni() {
+    public int getDni() {
         return dni;
     }
 
-    public void setDni(Integer dni) {
+    public void setDni(int dni) {
         this.dni = dni;
     }
 

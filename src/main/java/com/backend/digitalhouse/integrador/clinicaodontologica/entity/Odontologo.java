@@ -19,7 +19,7 @@ public class Odontologo {
     @Column(name = "APELLIDO_ODONTOLOGO", nullable = false, length = 50)
     private String apellido;
 
-    @OneToMany(mappedBy = "odontologo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "odontologo", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Turno> turnos = new HashSet<>();
 

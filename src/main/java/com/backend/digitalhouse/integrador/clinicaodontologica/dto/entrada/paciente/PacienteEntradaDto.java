@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PacienteEntradaDto {
 
-    @Size(max = 50, message = "El nombre debe tener hasta 50 caracteres")
+    @Size(min = 2, max = 50, message = "El nombre debe tener hasta 50 caracteres")
     @NotNull(message = "El nombre del paciente no puede ser nulo")
     @NotBlank(message = "Debe especificarse el nombre del paciente")
     private String nombre;

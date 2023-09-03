@@ -25,54 +25,69 @@ public class PacienteService implements IPacienteService {
     public PacienteService(PacienteRepository pacienteRepository, ModelMapper modelMapper) {
         this.pacienteRepository = pacienteRepository;
         this.modelMapper = modelMapper;
-        //configureMapping();
+    }
+    @Override
+    public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) {
+        Paciente paGuardado = pacienteRepository.save(dtoEntradaAEntidad(paciente));
+        PacienteSalidaDto pacienteSalidaDto = entidadADtoSalida(paGuardado);
+        LOGGER.info("Paciente guardado: {}", pacienteSalidaDto);
+        return pacienteSalidaDto;
     }
 
     @Override
     public PacienteSalidaDto modificarPaciente(PacienteModificacionEntradaDto pacienteModificado) {
-        Paciente pacienteActualizado = pacienteRepository.save(dtoModificadoAEntidad(pacienteModificado));
-        LOGGER.info("EL paciente ha sido actualizado: {}", pacienteActualizado);
+        Paciente pacienteRecibido = dtoModificadoAEntidad(pacienteModificado);
+        Paciente pacienteAModificar = pacienteRepository.findById(pacienteRecibido.getId()).orElse(null);
+        PacienteSalidaDto pacienteSalidaDto = null;
 
-        return entidadADtoSalida(pacienteActualizado);
+        if(pacienteAModificar != null) {
+
+            pacienteAModificar = pacienteRecibido;
+            pacienteRepository.save(pacienteAModificar);
+            pacienteSalidaDto = entidadADtoSalida(pacienteAModificar);
+            LOGGER.info("EL paciente ha sido actualizado: {}", pacienteAModificar);
+
+        } else  LOGGER.error("No fue posible actualizar los datos, odontologo no se encuentra registrado");
+        return pacienteSalidaDto;
     }
 
     @Override
     public PacienteSalidaDto buscarPacientePorId(Long id) {
-        LOGGER.info("Pacientes por id: {}", id);
+        Paciente pacienteBuscado = pacienteRepository.findById(id).orElse(null);
+        PacienteSalidaDto pacienteSalidaDto = null;
+        if(pacienteBuscado != null) {
+            pacienteSalidaDto = entidadADtoSalida(pacienteBuscado);
+            LOGGER.info("Paciente por id: {}", pacienteSalidaDto);
+        } else LOGGER.info("Paciente por id: {}", id);
 
-        return entidadADtoSalida(pacienteRepository.getReferenceById(id));
+        return pacienteSalidaDto;
     }
 
     @Override
     public List<PacienteSalidaDto> listarPacientes() {
-        List<Paciente> pacientes = pacienteRepository.findAll();
-        LOGGER.info("Lista de pacientes...");
 
-        return pacientes.stream()
-                .map(this::entidadADtoSalida)
-                .toList();
+        List<PacienteSalidaDto> pacientes = pacienteRepository.findAll().stream()
+                .map(paciente -> entidadADtoSalida(paciente)).toList();
+        LOGGER.info("Listado de todos los odontologos: {}", pacientes);
+        return pacientes;
     }
 
-    @Override
-    public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) {
-        Paciente pacienteNuevo = pacienteRepository.save(dtoEntradaAEntidad(paciente));
-        LOGGER.info("EL paciente ha sido registrado: {}", pacienteNuevo);
-        return entidadADtoSalida(pacienteNuevo);
-    }
     @Override
     public void eliminarPaciente(Long id) {
-        if(pacienteRepository != null )pacienteRepository.deleteById(id);
-        new RuntimeException("El paciente no existe..");
+        if(buscarPacientePorId(id) != null ) {
+            pacienteRepository.deleteById(id);
+            LOGGER.warn("Se ha eliminado el paciente con id: {}", id);
+        } else LOGGER.error("No se ha encontrado el paciente con id {}", id);
     }
 
-    /*private void configureMapping() {
+    private void configureMapping() {
         modelMapper.typeMap(PacienteEntradaDto.class, Paciente.class)
                 .addMappings(mapper -> mapper.map(PacienteEntradaDto::getDomicilio, Paciente::setDomicilio));
         modelMapper.typeMap(Paciente.class, PacienteSalidaDto.class)
                 .addMappings(mapper -> mapper.map(Paciente::getDomicilio, PacienteSalidaDto::setDomicilio));
         modelMapper.typeMap(PacienteModificacionEntradaDto.class, Paciente.class)
                 .addMappings(mapper -> mapper.map(PacienteModificacionEntradaDto::getDomicilio, Paciente::setDomicilio));
-    }*/
+    }
 
     public Paciente dtoEntradaAEntidad(PacienteEntradaDto pacienteEntradaDto) {
         return modelMapper.map(pacienteEntradaDto, Paciente.class);
