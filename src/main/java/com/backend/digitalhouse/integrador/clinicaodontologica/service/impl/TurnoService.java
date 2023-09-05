@@ -6,6 +6,8 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.turno.
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Odontologo;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Paciente;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Turno;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.BadRequestException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.OdontologoRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.PacienteRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.TurnoRepository;
@@ -37,7 +39,7 @@ public class TurnoService implements ITurnoService {
     }
 
     @Override
-    public TurnoSalidaDto registrarTurno(TurnoEntradaDto turnoEntradaDto) {
+    public TurnoSalidaDto registrarTurno(TurnoEntradaDto turnoEntradaDto) throws BadRequestException {
 
         Odontologo odontologo = odontologoRepository.getReferenceById(turnoEntradaDto.getOdontologoId());
         Paciente paciente = pacienteRepository.getReferenceById(turnoEntradaDto.getOdontologoId());
@@ -46,8 +48,9 @@ public class TurnoService implements ITurnoService {
         if(paciente != null && odontologo != null) {
             turnoNuevo = turnoRepository.save(dtoEntradaAEntidad(turnoEntradaDto));
             LOGGER.info("Nuevo turno registrado con exito: {}", turnoNuevo);
-        } else LOGGER.error("El paciente o el odontologo no se encuentran en bdd..");
-        return entidadADtoSalida(turnoNuevo);
+        } else
+            LOGGER.error("El paciente o el odontologo no se encuentran en bdd..");
+            throw new BadRequestException("El paciente o el odontologo no se encuentran en bdd..");
     }
 
     @Override
@@ -66,16 +69,21 @@ public class TurnoService implements ITurnoService {
         if(turnoBuscado != null) {
             turnoSalida = entidadADtoSalida(turnoBuscado);
             LOGGER.info("Turno por id: {}", turnoSalida);
-        } else LOGGER.error("El de id_turno no se encuentra registrador.. ");
+        } else {
+            LOGGER.error("El de id_turno no se encuentra registrador.. ");
+        }
         return turnoSalida;
     }
 
     @Override
-    public void eliminarTurno(Long id) {
+    public void eliminarTurno(Long id) throws ResourceNotFoundException {
         if (buscarTurnoPorId(id) != null) {
             turnoRepository.deleteById(id);
             LOGGER.warn("Se ha eliminado turno con id: {}", id);
-        } else LOGGER.error("No se ha encontrado el turno con id {}", id);
+        } else {
+            LOGGER.error("No se ha encontrado el turno con id {}", id);
+            throw new ResourceNotFoundException("No se ha encontrado el odontologo con id " + id);
+        }
     }
 
     @Override

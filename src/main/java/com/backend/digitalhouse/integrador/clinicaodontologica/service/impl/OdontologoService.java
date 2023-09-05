@@ -4,6 +4,7 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modif
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.odontologo.OdontologoEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.odontologo.OdontologoSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Odontologo;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.OdontologoRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.IOdontologoService;
 import org.modelmapper.ModelMapper;
@@ -71,11 +72,14 @@ public class OdontologoService implements IOdontologoService {
         return odontologos;
     }
 
-    public void eliminarOdontologo(Long id) {
+    public void eliminarOdontologo(Long id) throws ResourceNotFoundException {
         if (buscarOdontologoPorId(id) != null) {
             odontologoRepository.deleteById(id);
             LOGGER.warn("Se ha eliminado el odontologo con id: {}", id);
-        } else LOGGER.error("No se ha encontrado el odontologo con id {}", id);
+        } else {
+            LOGGER.error("No se ha encontrado el odontologo con id {}", id);
+            throw new ResourceNotFoundException("No se ha encontrado el odontologo con id " + id);
+        }
     }
 
     public Odontologo dtoEntradaAEntidad(OdontologoEntradaDto odontologoEntradaDto) {

@@ -2,6 +2,7 @@ package com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modi
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -14,7 +15,7 @@ public class PacienteModificacionEntradaDto {
     @NotNull
     private String apellido;
     @NotNull
-    private String dni;
+    private int dni;
     @NotNull
     private LocalDate fechaIngreso;
     @NotNull
@@ -22,7 +23,7 @@ public class PacienteModificacionEntradaDto {
     public PacienteModificacionEntradaDto() {
     }
 
-    public PacienteModificacionEntradaDto(Long id, String nombre, String apellido, String dni, LocalDate fechaIngreso, DomicilioModificacionEntradaDto domicilio) {
+    public PacienteModificacionEntradaDto(Long id, String nombre, String apellido, int dni, LocalDate fechaIngreso, DomicilioModificacionEntradaDto domicilio) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -55,11 +56,11 @@ public class PacienteModificacionEntradaDto {
         this.apellido = apellido;
     }
 
-    public String getDni() {
+    public int getDni() {
         return dni;
     }
 
-    public void setDni(String dni) {
+    public void setDni(int dni) {
         this.dni = dni;
     }
 

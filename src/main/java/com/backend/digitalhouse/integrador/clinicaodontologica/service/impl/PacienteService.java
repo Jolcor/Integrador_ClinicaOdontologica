@@ -4,6 +4,8 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modif
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.paciente.PacienteEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.paciente.PacienteSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Paciente;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.BadRequestException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.PacienteRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.IPacienteService;
 
@@ -27,11 +29,16 @@ public class PacienteService implements IPacienteService {
         this.modelMapper = modelMapper;
     }
     @Override
-    public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) {
-        Paciente paGuardado = pacienteRepository.save(dtoEntradaAEntidad(paciente));
-        PacienteSalidaDto pacienteSalidaDto = entidadADtoSalida(paGuardado);
-        LOGGER.info("Paciente guardado: {}", pacienteSalidaDto);
-        return pacienteSalidaDto;
+    public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) throws BadRequestException {
+        if(paciente != null) {
+            Paciente paGuardado = pacienteRepository.save(dtoEntradaAEntidad(paciente));
+            PacienteSalidaDto pacienteSalidaDto = entidadADtoSalida(paGuardado);
+            LOGGER.info("Paciente guardado: {}", pacienteSalidaDto);
+            return pacienteSalidaDto;
+        } else {
+            LOGGER.error("No se puedo registrar el paciente..");
+            throw new BadRequestException("No se puedo registrar el paciente..");
+        }
     }
 
     @Override
@@ -73,11 +80,14 @@ public class PacienteService implements IPacienteService {
     }
 
     @Override
-    public void eliminarPaciente(Long id) {
+    public void eliminarPaciente(Long id) throws ResourceNotFoundException {
         if(buscarPacientePorId(id) != null ) {
             pacienteRepository.deleteById(id);
             LOGGER.warn("Se ha eliminado el paciente con id: {}", id);
-        } else LOGGER.error("No se ha encontrado el paciente con id {}", id);
+        } else {
+            LOGGER.error("No se ha encontrado el paciente con id {}", id);
+            throw new ResourceNotFoundException("No se ha encontrado el odontologo con id " + id);
+        }
     }
 
     private void configureMapping() {

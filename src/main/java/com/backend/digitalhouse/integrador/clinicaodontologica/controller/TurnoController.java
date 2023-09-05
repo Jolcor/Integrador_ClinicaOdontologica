@@ -3,6 +3,8 @@ package com.backend.digitalhouse.integrador.clinicaodontologica.controller;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modificacion.TurnoModificacionEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.turno.TurnoEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.turno.TurnoSalidaDto;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.BadRequestException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.ITurnoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,17 +24,17 @@ public class TurnoController {
         this.turnoService = turnoService;
     }
 
-    @PostMapping("registrar")
-    public ResponseEntity<TurnoSalidaDto> resgistrarPaciente(@Valid @RequestBody TurnoEntradaDto turno){
+    @PostMapping("/registrar")
+    public ResponseEntity<TurnoSalidaDto> resgistrarPaciente(@Valid @RequestBody TurnoEntradaDto turno) throws BadRequestException {
         return new ResponseEntity<>(turnoService.registrarTurno(turno), HttpStatus.CREATED);
     }
 
-    @PostMapping("actualizar")
+    @PostMapping("/actualizar")
     public ResponseEntity<TurnoSalidaDto> actualizarTurno(@Valid @RequestBody TurnoModificacionEntradaDto turno) {
         return new ResponseEntity<>(turnoService.modificarTurno(turno), HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<TurnoSalidaDto> obtenerPacientePorId(@PathVariable Long id){
         return new ResponseEntity<>(turnoService.buscarTurnoPorId(id), HttpStatus.OK);
     }
@@ -43,7 +45,7 @@ public class TurnoController {
     }
 
     @DeleteMapping("eliminar/{id}")
-    public ResponseEntity<?> eliminarTurno(@PathVariable Long id){
+    public ResponseEntity<?> eliminarTurno(@PathVariable Long id) throws ResourceNotFoundException {
         turnoService.eliminarTurno(id);
         return new ResponseEntity<>("Paciente eliminado correctamente", HttpStatus.NO_CONTENT);
     }

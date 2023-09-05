@@ -29,7 +29,8 @@ public class Domicilio {
     public Domicilio() {
     }
 
-    public Domicilio(String calle, int numero, String localidad, String provincia) {
+    public Domicilio(Long id, String calle, int numero, String localidad, String provincia) {
+        this.id = id;
         this.calle = calle;
         this.numero = numero;
         this.localidad = localidad;
@@ -38,6 +39,10 @@ public class Domicilio {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCalle() {

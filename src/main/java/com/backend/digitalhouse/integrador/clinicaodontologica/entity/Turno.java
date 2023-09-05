@@ -25,7 +25,8 @@ public class Turno {
     public Turno() {
     }
 
-    public Turno(Odontologo odontologo, Paciente paciente, LocalDateTime fechaYHora) {
+    public Turno(Long id, Odontologo odontologo, Paciente paciente, LocalDateTime fechaYHora) {
+        this.id = id;
         this.odontologo = odontologo;
         this.paciente = paciente;
         this.fechaYHora = fechaYHora;
@@ -34,6 +35,10 @@ public class Turno {
     public Long getId() {
             return id;
         }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Odontologo getOdontologo() {
         return odontologo;

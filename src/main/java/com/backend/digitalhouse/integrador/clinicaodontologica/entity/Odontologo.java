@@ -12,6 +12,8 @@ public class Odontologo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "MATRICULA_ODONTOLOGO", nullable = false, length = 50)
+
     private String matricula;
     @Column(name = "NOMBRE_ODONTOLOGO", nullable = false, length = 50)
     private String nombre;
@@ -21,12 +23,13 @@ public class Odontologo {
 
     @OneToMany(mappedBy = "odontologo", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonIgnore
-    private Set<Turno> turnos = new HashSet<>();
+    private Set<Turno> turnos;
 
     public Odontologo() {
     }
 
-    public Odontologo(String matricula, String nombre, String apellido) {
+    public Odontologo(Long id, String matricula, String nombre, String apellido) {
+        this.id = id;
         this.matricula = matricula;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -34,6 +37,10 @@ public class Odontologo {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getMatricula() {

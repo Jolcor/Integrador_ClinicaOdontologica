@@ -18,8 +18,9 @@ public class PacienteEntradaDto {
     @NotBlank(message = "Debe especificarse el apellido del paciente")
     private String apellido;
 
-    @Pattern(regexp = "\\d+", message = "El campo dni sólo admite caracteres numéricos")
-    @NotBlank(message = "Debe especificarse el dni del paciente")
+    //Pattern(regexp = "\\d+", message = "El campo dni sólo admite caracteres numéricos")
+    @Digits(integer = 8, fraction = 0, message = "El número debe tener como máximo 8 dígitos")
+    @NotNull(message = "Debe especificarse el dni del paciente")
     private int dni;
 
     //@JsonProperty("fechaingreso") - en caso de que el campo a mapear este escrito distinto a nuestro modelo
@@ -27,7 +28,6 @@ public class PacienteEntradaDto {
     @NotNull(message = "Debe especificarse la fecha de ingreso del paciente")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaIngreso;
-
 
     @NotNull(message = "El domicilio del paciente no puede ser nulo")
     private DomicilioEntradaDto domicilio;
