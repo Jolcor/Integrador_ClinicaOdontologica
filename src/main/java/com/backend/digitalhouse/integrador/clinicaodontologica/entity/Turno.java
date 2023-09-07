@@ -33,11 +33,7 @@ public class Turno {
     }
 
     public Long getId() {
-            return id;
-        }
-
-    public void setId(Long id) {
-        this.id = id;
+        return id;
     }
 
     public Odontologo getOdontologo() {

@@ -2,7 +2,6 @@ package com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modi
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -20,6 +19,7 @@ public class PacienteModificacionEntradaDto {
     private LocalDate fechaIngreso;
     @NotNull
     private DomicilioModificacionEntradaDto domicilio;
+
     public PacienteModificacionEntradaDto() {
     }
 

@@ -8,7 +8,6 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.BadRequ
 import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.PacienteRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.IPacienteService;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,45 +15,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class PacienteService implements IPacienteService {
     private final Logger LOGGER = LoggerFactory.getLogger(PacienteService.class);
 
-    private final PacienteRepository  pacienteRepository;
+    private final PacienteRepository pacienteRepository;
     private ModelMapper modelMapper;
 
     @Autowired
     public PacienteService(PacienteRepository pacienteRepository, ModelMapper modelMapper) {
         this.pacienteRepository = pacienteRepository;
         this.modelMapper = modelMapper;
+        configureMapping();
     }
+
     @Override
     public PacienteSalidaDto registrarPaciente(PacienteEntradaDto paciente) throws BadRequestException {
-        if(paciente != null) {
+        if (paciente != null) {
             Paciente paGuardado = pacienteRepository.save(dtoEntradaAEntidad(paciente));
             PacienteSalidaDto pacienteSalidaDto = entidadADtoSalida(paGuardado);
             LOGGER.info("Paciente guardado: {}", pacienteSalidaDto);
             return pacienteSalidaDto;
         } else {
-            LOGGER.error("No se puedo registrar el paciente..");
-            throw new BadRequestException("No se puedo registrar el paciente..");
+            LOGGER.error("No se puedo registrar el paciente");
+            throw new BadRequestException("No se puedo registrar el paciente");
         }
     }
 
     @Override
-    public PacienteSalidaDto modificarPaciente(PacienteModificacionEntradaDto pacienteModificado) {
+    public PacienteSalidaDto modificarPaciente(PacienteModificacionEntradaDto pacienteModificado) throws ResourceNotFoundException {
         Paciente pacienteRecibido = dtoModificadoAEntidad(pacienteModificado);
         Paciente pacienteAModificar = pacienteRepository.findById(pacienteRecibido.getId()).orElse(null);
         PacienteSalidaDto pacienteSalidaDto = null;
 
-        if(pacienteAModificar != null) {
+        if (pacienteAModificar != null) {
 
             pacienteAModificar = pacienteRecibido;
             pacienteRepository.save(pacienteAModificar);
             pacienteSalidaDto = entidadADtoSalida(pacienteAModificar);
             LOGGER.info("EL paciente ha sido actualizado: {}", pacienteAModificar);
 
-        } else  LOGGER.error("No fue posible actualizar los datos, odontologo no se encuentra registrado");
+        } else {
+
+            LOGGER.error("No fue posible actualizar los datos, odontologo no se encuentra registrado");
+            throw new ResourceNotFoundException("No fue posible actualizar los datos, odontologo no se encuentra registrado");
+        }
         return pacienteSalidaDto;
     }
 
@@ -62,11 +68,10 @@ public class PacienteService implements IPacienteService {
     public PacienteSalidaDto buscarPacientePorId(Long id) {
         Paciente pacienteBuscado = pacienteRepository.findById(id).orElse(null);
         PacienteSalidaDto pacienteSalidaDto = null;
-        if(pacienteBuscado != null) {
+        if (pacienteBuscado != null) {
             pacienteSalidaDto = entidadADtoSalida(pacienteBuscado);
             LOGGER.info("Paciente por id: {}", pacienteSalidaDto);
         } else LOGGER.info("Paciente por id: {}", id);
-
         return pacienteSalidaDto;
     }
 
@@ -81,7 +86,7 @@ public class PacienteService implements IPacienteService {
 
     @Override
     public void eliminarPaciente(Long id) throws ResourceNotFoundException {
-        if(buscarPacientePorId(id) != null ) {
+        if (buscarPacientePorId(id) != null) {
             pacienteRepository.deleteById(id);
             LOGGER.warn("Se ha eliminado el paciente con id: {}", id);
         } else {

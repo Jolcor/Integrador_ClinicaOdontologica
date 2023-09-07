@@ -3,8 +3,10 @@ package com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.paci
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PacienteEntradaDto {
 
@@ -30,6 +32,7 @@ public class PacienteEntradaDto {
     private LocalDate fechaIngreso;
 
     @NotNull(message = "El domicilio del paciente no puede ser nulo")
+    @Valid
     private DomicilioEntradaDto domicilio;
 
     public PacienteEntradaDto() {

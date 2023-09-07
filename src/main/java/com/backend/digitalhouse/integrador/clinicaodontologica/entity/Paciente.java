@@ -3,11 +3,8 @@ package com.backend.digitalhouse.integrador.clinicaodontologica.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity

@@ -4,6 +4,7 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modif
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.odontologo.OdontologoEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.odontologo.OdontologoSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Odontologo;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.BadRequestException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.OdontologoRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.IOdontologoService;
@@ -28,16 +29,20 @@ public class OdontologoService implements IOdontologoService {
     }
 
     @Override
-    public OdontologoSalidaDto registrarOdontologo(OdontologoEntradaDto odontologo) {
-
-        Odontologo odGuardado = odontologoRepository.save(dtoEntradaAEntidad(odontologo));
-        OdontologoSalidaDto odontologoSalidaDto = entidadADtoSalida(odGuardado);
-        LOGGER.info("Odontologo guardado: {}", odontologoSalidaDto);
-        return odontologoSalidaDto;
+    public OdontologoSalidaDto registrarOdontologo(OdontologoEntradaDto odontologo) throws BadRequestException {
+        if (odontologo != null) {
+            Odontologo odGuardado = odontologoRepository.save(dtoEntradaAEntidad(odontologo));
+            OdontologoSalidaDto odontologoSalidaDto = entidadADtoSalida(odGuardado);
+            LOGGER.info("Odontologo guardado: {}", odontologoSalidaDto);
+            return odontologoSalidaDto;
+        } else {
+            LOGGER.error("No se puedo registrar el odontologo");
+            throw new BadRequestException("No se puedo registrar el odontologo");
+        }
     }
 
     @Override
-    public OdontologoSalidaDto actualizarOdontologo(OdontologoModificacionEntradaDto odontologoModificado) {
+    public OdontologoSalidaDto actualizarOdontologo(OdontologoModificacionEntradaDto odontologoModificado) throws ResourceNotFoundException {
         Odontologo odontologoRecibido = dtoModificadoAEntidad(odontologoModificado);
         Odontologo odontologoAModificar = odontologoRepository.findById(odontologoRecibido.getId()).orElse(null);
         OdontologoSalidaDto odontologoSalidaDto = null;
@@ -49,7 +54,11 @@ public class OdontologoService implements IOdontologoService {
             odontologoSalidaDto = entidadADtoSalida(odontologoAModificar);
             LOGGER.warn("Odontologo actualizado: {}", odontologoSalidaDto);
 
-        } else LOGGER.error("No fue posible actualizar los datos, odontologo no se encuentra registrado");
+        } else {
+
+            LOGGER.error("No fue posible actualizar los datos, odontologo no se encuentra registrado");
+            throw new ResourceNotFoundException("No fue posible actualizar los datos, odontologo no se encuentra registrado");
+        }
         return odontologoSalidaDto;
     }
 
