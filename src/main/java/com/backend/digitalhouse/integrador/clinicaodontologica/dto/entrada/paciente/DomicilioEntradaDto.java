@@ -2,9 +2,9 @@ package com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.paci
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DomicilioEntradaDto {
@@ -14,9 +14,9 @@ public class DomicilioEntradaDto {
     private String calle;
 
     @NotNull(message = "El numero no puede ser nulo")
-    @NotBlank(message = "Debe especificarse el numero")
-    //@Digits(integer = 8, fraction = 0, message = "El número debe tener como máximo 8 dígitos")
-    @Pattern(regexp = "\\d{1,8}", message = "El número debe tener como máximo 8 dígitos")
+    //@NotBlank(message = "Debe especificarse el numero")
+    @Digits(integer = 8, fraction = 0, message = "El número debe tener como máximo 8 dígitos")
+    //@Pattern(regexp = "\\d{1,8}", message = "El número debe tener como máximo 8 dígitos")
     private int numero;
 
     @NotNull(message = "La localidad no puede ser nula")

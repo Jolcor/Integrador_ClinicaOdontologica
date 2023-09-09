@@ -37,4 +37,9 @@ public class PacienteTurnoSalidaDto {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
+
+    @Override
+    public String toString() {
+        return "Id: " + id + " - Nombre: " + nombre + " - Apellido: " + apellido;
+    }
 }
