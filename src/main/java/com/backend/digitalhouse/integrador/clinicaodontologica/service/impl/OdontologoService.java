@@ -4,8 +4,8 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modif
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.odontologo.OdontologoEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.odontologo.OdontologoSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Odontologo;
-import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.BadRequestException;
-import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exceptions.BadRequestException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exceptions.ResourceNotFoundException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.OdontologoRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.IOdontologoService;
 import org.modelmapper.ModelMapper;

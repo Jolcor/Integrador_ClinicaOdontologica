@@ -1,4 +1,4 @@
-package com.backend.digitalhouse.integrador.clinicaodontologica.exeptions;
+package com.backend.digitalhouse.integrador.clinicaodontologica.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;

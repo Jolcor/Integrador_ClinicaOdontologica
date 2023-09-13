@@ -3,8 +3,8 @@ package com.backend.digitalhouse.integrador.clinicaodontologica.service;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modificacion.TurnoModificacionEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.turno.TurnoEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.turno.TurnoSalidaDto;
-import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.BadRequestException;
-import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exceptions.BadRequestException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 

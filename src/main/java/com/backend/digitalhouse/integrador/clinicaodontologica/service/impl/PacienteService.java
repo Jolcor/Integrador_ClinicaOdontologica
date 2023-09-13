@@ -4,8 +4,8 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.modif
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.entrada.paciente.PacienteEntradaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.paciente.PacienteSalidaDto;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Paciente;
-import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.BadRequestException;
-import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exceptions.BadRequestException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exceptions.ResourceNotFoundException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.PacienteRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.IPacienteService;
 import org.modelmapper.ModelMapper;
@@ -58,8 +58,8 @@ public class PacienteService implements IPacienteService {
 
         } else {
 
-            LOGGER.error("No fue posible actualizar los datos, odontologo no se encuentra registrado");
-            throw new ResourceNotFoundException("No fue posible actualizar los datos, odontologo no se encuentra registrado");
+            LOGGER.error("No fue posible actualizar los datos, paciente no se encuentra registrado");
+            throw new ResourceNotFoundException("No fue posible actualizar los datos, paciente no se encuentra registrado");
         }
         return pacienteSalidaDto;
     }
@@ -80,7 +80,7 @@ public class PacienteService implements IPacienteService {
 
         List<PacienteSalidaDto> pacientes = pacienteRepository.findAll().stream()
                 .map(paciente -> entidadADtoSalida(paciente)).toList();
-        LOGGER.info("Listado de todos los odontologos: {}", pacientes);
+        LOGGER.info("Listado de todos los pacientes: {}", pacientes);
         return pacientes;
     }
 
@@ -91,7 +91,7 @@ public class PacienteService implements IPacienteService {
             LOGGER.warn("Se ha eliminado el paciente con id: {}", id);
         } else {
             LOGGER.error("No se ha encontrado el paciente con id {}", id);
-            throw new ResourceNotFoundException("No se ha encontrado el odontologo con id " + id);
+            throw new ResourceNotFoundException("No se ha encontrado el paciente con id " + id);
         }
     }
 

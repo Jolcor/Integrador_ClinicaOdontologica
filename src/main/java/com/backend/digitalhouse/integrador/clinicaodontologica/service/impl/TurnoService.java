@@ -10,8 +10,8 @@ import com.backend.digitalhouse.integrador.clinicaodontologica.dto.salida.turno.
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Odontologo;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Paciente;
 import com.backend.digitalhouse.integrador.clinicaodontologica.entity.Turno;
-import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.BadRequestException;
-import com.backend.digitalhouse.integrador.clinicaodontologica.exeptions.ResourceNotFoundException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exceptions.BadRequestException;
+import com.backend.digitalhouse.integrador.clinicaodontologica.exceptions.ResourceNotFoundException;
 import com.backend.digitalhouse.integrador.clinicaodontologica.repository.TurnoRepository;
 import com.backend.digitalhouse.integrador.clinicaodontologica.service.ITurnoService;
 import org.modelmapper.ModelMapper;
@@ -83,14 +83,13 @@ public class TurnoService implements ITurnoService {
     @Override
     public TurnoSalidaDto buscarTurnoPorId(Long id) {
         Turno turnoBuscado = turnoRepository.findById(id).orElse(null);
-        TurnoSalidaDto turnoSalida = null;
+
+        TurnoSalidaDto turnoSalidaDto;
         if (turnoBuscado != null) {
-            turnoSalida = entidadADto(turnoBuscado);
-            LOGGER.info("Turno por id: {}", turnoSalida);
-        } else {
-            LOGGER.error("El de id_turno no se encuentra registrador.. ");
-        }
-        return turnoSalida;
+            turnoSalidaDto = entidadADto(turnoBuscado);
+            LOGGER.info("Turno encontrado: {}", turnoSalidaDto);
+        } else LOGGER.error("Turno por id: {}", id);
+        return null;
     }
 
     @Override
