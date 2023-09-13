@@ -40,19 +40,15 @@ public class TurnoServiceTest {
     @Order(1)
     void alIntentarRegistrarUnTurnoSinIdPacienteYIdOdontoloho_deberiaLanzarUnaResourceNotFoundException() {
 
-        try {
-            TurnoEntradaDto turnoEntradaDto = new TurnoEntradaDto();
+        TurnoEntradaDto turnoEntradaDto = new TurnoEntradaDto();
+        assertThrows(BadRequestException.class, () -> {
             turnoService.registrarTurno(turnoEntradaDto);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        assertNull(turnoService.listarTurno());
+        });
     }
 
     @Test
     @Order(2)
-    void alIntentarListarLosTurnosSinTenerTurno_deberaLanzarResourceNotFoundException() {
+    void alListarTurnosAgregandoUnTurnoPreviamente_deberaRetornarUnaListaConUnTurno() {
 
         try {
 
@@ -77,6 +73,27 @@ public class TurnoServiceTest {
 
         assertNotNull(turnoService.buscarTurnoPorId(1L));
         assertTrue(turnoService.listarTurno().size() > 0);
+    }
+
+
+    @Test
+    @Order(3)
+    void alIntentarListarLosTurnosSinTenerTurno_deberaLanzarResourceNotFoundException() {
+
+        try {
+
+            DomicilioEntradaDto domicilioPacienteNuevo = new DomicilioEntradaDto("Belen", 85, "Medellin", "Antioquia");
+            PacienteEntradaDto pacienteNuevo = new PacienteEntradaDto("Luis", "Corrales", 123456, LocalDate.of(2023, 9, 11), domicilioPacienteNuevo);
+            pacienteService.registrarPaciente(pacienteNuevo);
+
+            OdontologoEntradaDto odontologoNuevo = new OdontologoEntradaDto("121321", "Jorge", "Corrales");
+            odontologoService.registrarOdontologo(odontologoNuevo);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertNull(turnoService.buscarTurnoPorId(3L));
     }
 
 }

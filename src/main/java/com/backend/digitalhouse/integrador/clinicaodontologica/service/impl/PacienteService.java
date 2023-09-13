@@ -66,7 +66,12 @@ public class PacienteService implements IPacienteService {
 
     @Override
     public PacienteSalidaDto buscarPacientePorId(Long id) {
-        Paciente pacienteBuscado = pacienteRepository.findById(id).orElse(null);
+        Paciente pacienteBuscado = null;
+        try{
+            pacienteBuscado = pacienteRepository.findById(id).orElse(null);
+        }catch(Exception e){
+            LOGGER.info("Id del paciente no se encuentra");
+        }
         PacienteSalidaDto pacienteSalidaDto = null;
         if (pacienteBuscado != null) {
             pacienteSalidaDto = entidadADtoSalida(pacienteBuscado);

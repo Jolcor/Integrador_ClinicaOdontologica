@@ -84,12 +84,14 @@ public class TurnoService implements ITurnoService {
     public TurnoSalidaDto buscarTurnoPorId(Long id) {
         Turno turnoBuscado = turnoRepository.findById(id).orElse(null);
 
-        TurnoSalidaDto turnoSalidaDto;
+        TurnoSalidaDto turnoSalidaDto = null;
         if (turnoBuscado != null) {
             turnoSalidaDto = entidadADto(turnoBuscado);
             LOGGER.info("Turno encontrado: {}", turnoSalidaDto);
-        } else LOGGER.error("Turno por id: {}", id);
-        return null;
+        } else {
+            LOGGER.error("Turno por id: {}", id);
+        }
+        return turnoSalidaDto;
     }
 
     @Override

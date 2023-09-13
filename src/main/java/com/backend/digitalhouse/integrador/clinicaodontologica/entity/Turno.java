@@ -11,11 +11,11 @@ public class Turno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "odontologo_id", nullable = false) // odontologo -> entidad : id -> referencia
     private Odontologo odontologo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 

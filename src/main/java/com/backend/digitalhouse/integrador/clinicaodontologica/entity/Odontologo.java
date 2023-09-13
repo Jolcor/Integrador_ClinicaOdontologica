@@ -11,9 +11,10 @@ public class Odontologo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "MATRICULA_ODONTOLOGO", nullable = false, length = 50)
 
+    @Column(name = "MATRICULA_ODONTOLOGO", nullable = false, length = 50)
     private String matricula;
+
     @Column(name = "NOMBRE_ODONTOLOGO", nullable = false, length = 50)
     private String nombre;
 

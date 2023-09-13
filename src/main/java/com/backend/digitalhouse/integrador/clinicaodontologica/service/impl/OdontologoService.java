@@ -63,7 +63,12 @@ public class OdontologoService implements IOdontologoService {
     }
 
     public OdontologoSalidaDto buscarOdontologoPorId(Long id) {
-        Odontologo odontologoBuscado = odontologoRepository.findById(id).orElse(null); //orElse -> para anular el null
+        Odontologo odontologoBuscado = null;
+        try{
+            odontologoBuscado = odontologoRepository.findById(id).orElse(null); //orElse -> para anular el null
+        }catch(Exception e){
+            LOGGER.info("Id del odontologo no se encuentra");
+        }
         OdontologoSalidaDto odontologoSalida = null;
         if (odontologoBuscado != null) {
             odontologoSalida = entidadADtoSalida(odontologoBuscado);
