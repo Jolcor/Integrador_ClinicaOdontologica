@@ -56,7 +56,7 @@ public class OdontologoServiceTest {
     void alIntentarEliminarUnOdontoloqueNoExita_deberaLanzardeberaUnaResourceNotFoundException() {
 
         OdontologoModificacionEntradaDto odontologoModificacionEntradaDto = new OdontologoModificacionEntradaDto();
-        odontologoModificacionEntradaDto.setId(2L);
+        odontologoModificacionEntradaDto.setId(3L);
 
         assertThrows(ResourceNotFoundException.class, () -> odontologoService.actualizarOdontologo(odontologoModificacionEntradaDto));
 
