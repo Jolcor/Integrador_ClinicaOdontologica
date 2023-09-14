@@ -40,8 +40,8 @@ public class OdontologoController {
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-
     @PostMapping("/registrar")
+    @CrossOrigin(origins = "http://127.0.0.1:5500")
     public ResponseEntity<OdontologoSalidaDto> registrarOdontologo(@Valid @RequestBody OdontologoEntradaDto odontologo) throws BadRequestException {
         return new ResponseEntity<>(odontologoService.registrarOdontologo(odontologo), HttpStatus.CREATED);
     }

@@ -1,26 +1,37 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Odontólogos</title>
     <link rel="stylesheet" href="./css/style.css">
+    <title>Registro de Odontólogo</title>
 </head>
 <body>
-    <h1>Registro de Odontólogos</h1>
-    <div class="form-container">
-        <label for="matricula">Matrícula:</label>
-        <input type="text" id="matricula" placeholder="Ingrese la matrícula">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" placeholder="Ingrese el nombre">
-        <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" placeholder="Ingrese el apellido">
-        <button id="registrarBtn">Registrar Odontólogo</button>
-    </div>
-    <div class="lista-container">
-        <h2>Listado de Odontólogos</h2>
-        <ul id="listaOdontologos"></ul>
-    </div>
-    <script src="script.js"></script>
+    <form class="contenedor" id="new_odontologo">
+        <div class="formulario">
+            <h1>Registro de Odontólogo</h1>
+            <form action="#" method="post">
+                <div class="campo">
+                    <label for="matricula">Matrícula:</label>
+                    <input type="text" id="matricula" name="matricula" required>
+                </div>
+                <div class="campo">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="campo">
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" id="apellido" name="apellido" required>
+                </div>
+                <div class="boton">
+                    <button type="submit">Registrar</button>
+                </div>
+            </form>
+        </div>
+        <div id="mensaje"></div>
+    </form>
+
+    <script src="./script.js"></script>
 </body>
 </html>

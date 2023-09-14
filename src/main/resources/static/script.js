@@ -1,40 +1,65 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const matriculaInput = document.getElementById("matricula");
-    const nombreInput = document.getElementById("nombre");
-    const apellidoInput = document.getElementById("apellido");
-    const registrarBtn = document.getElementById("registrarBtn");
-    const listaOdontologos = document.getElementById("listaOdontologos");
+window.addEventListener('load', () => {
+    const registro = document.querySelector('#new_odontologo');
 
-    let id = 1; // Inicializamos el ID en 1
+    registro.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-    registrarBtn.addEventListener("click", () => {
-        const matricula = matriculaInput.value;
-        const nombre = nombreInput.value;
-        const apellido = apellidoInput.value;
+        const formData = {
+            matricula: document.querySelector('#matricula').value,
+            nombre: document.querySelector('#nombre').value,
+            apellido: document.querySelector('#apellido').value,
+        };
 
-        if (matricula && nombre && apellido) {
-            const odontologo = {
-                id: id++, // Incrementamos el ID y luego lo usamos
-                matricula,
-                nombre,
-                apellido
-            };
+        const url = 'http://localhost:8081/odontologos/registrar'; 
+        const settings = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        };
+        console.log(JSON.stringify(formData));
+        fetch(url, settings)
+            .then(response => {
+                return response.json();
+            }).then(data => {
+                if(data.id == undefined){
+                    let errorAlert =  document.querySelector('#mensaje');
+                    errorAlert.textContent = data.matricula;
+                    errorAlert.style = `
+                    display: flex;
+                    color: red;
+                    `;
+                    
+                } else {
+                    const mensajeDiv = document.querySelector('#mensaje');
+                    mensajeDiv.textContent = "Odontólogo " + 
+                        data.nombre + 
+                        " " + data.apellido + 
+                        " fue registrado correctamente con el numero de matricula = " + data.matricula;
+                    mensajeDiv.style= `
+                    display: flex;
+                    color: green;
+                    `;
+                }
+                actualizarListado();
+            })
+            .catch(error => {
 
-            // Agregar el odontólogo a la lista
-            agregarOdontologoALaLista(odontologo);
+                let errorAlert =  document.querySelector('#mensaje');
+                errorAlert.textContent = "Error intente nuevamente " + error;
+                errorAlert.style = `
+                display: flex;
+                color: red;
+                `;
 
-            // Limpiar los campos de entrada
-            matriculaInput.value = "";
-            nombreInput.value = "";
-            apellidoInput.value = "";
-        } else {
-            alert("Por favor, complete todos los campos.");
-        }
+                actualizarListado();
+            });
     });
-
-    function agregarOdontologoALaLista(odontologo) {
-        const li = document.createElement("li");
-        li.textContent = `ID: ${odontologo.id} | Matrícula: ${odontologo.matricula} | Nombre: ${odontologo.nombre} | Apellido: ${odontologo.apellido}`;
-        listaOdontologos.appendChild(li);
-    }
 });
+
+function actualizarListado() {
+    document.querySelector('#matricula').value = "";
+    document.querySelector('#nombre').value = "";
+    document.querySelector('#apellido').value = "";
+}
